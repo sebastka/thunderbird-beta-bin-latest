@@ -17,7 +17,7 @@ pkgbase = thunderbird-beta-bin
 	optdepends = libcanberra: Sound support
 	provides = thunderbird=86.0b2
 	conflicts = thunderbird-beta
-	source = https://ftp.mozilla.org/pub/thunderbird/releases/86.0b2/linux-x86_64/en-US/thunderbird-86.0b2.tar.bz2
+	source = https://download.mozilla.org/?product=thunderbird-beta-latest&os=linux64&lang=en-US
 	source = thunderbird-beta-bin.desktop
 	source = vendor.js
 	sha512sums = 2313497b92d30334ab64cbbe7ec1199ff9363b972a75929307e988dc7a01889b6ff686f4a61dfb2525f68ee74e91ce4cd6022064f8f6ba52f3db57d6f27a9d60

@@ -1,6 +1,10 @@
 # Maintainer: Det <nimetonmaili g-mail>
 # Based on [extra]'s thunderbird
 
+# Get latest
+latestbinurl=$(curl -sI "https://download.mozilla.org/?product=thunderbird-beta-latest&os=linux64&lang=en-US" | grep "Location: " | cut -d " " -f2 | tr -d '\r')
+basename=$(basename "$latestbinurl")
+
 pkgname=thunderbird-beta-bin
 _pkgname=thunderbird-beta
 pkgver=86.0b2
@@ -17,15 +21,21 @@ optdepends=('hyphen: Hyphenation'
 provides=("thunderbird=$pkgver")
 conflicts=('thunderbird-beta')
 install=$pkgname.install
-source=("https://ftp.mozilla.org/pub/thunderbird/releases/$pkgver/linux-x86_64/en-US/thunderbird-$pkgver.tar.bz2"
+source=("$latestbinurl" 
         'thunderbird-beta-bin.desktop'
         'vendor.js')
-sha512sums=('2313497b92d30334ab64cbbe7ec1199ff9363b972a75929307e988dc7a01889b6ff686f4a61dfb2525f68ee74e91ce4cd6022064f8f6ba52f3db57d6f27a9d60'
+
+pkgver() {
+  echo "$(echo "$basename" | cut -d "-" -f2 | cut -d "." -f1).$(echo "$basename" | cut -d "-" -f2 | cut -d "." -f2)"
+}
+
+sha512sums=($(curl -v --silent https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/$(pkgver)/SHA512SUMS 2>&1 | grep "linux-$arch/en-US/$basename" | cut -d " " -f1) 
             '97976bec26750151ecc474a4d6aabffce5c45de077e2c3c4b76035ae282a26a6959c8dc4726227bb2243c98ff81d92a5eeb252eb234ad702ae4cd4263a630c73'
             'aeb444784732267f1b1e87e6084a776f82a1912c4c2637d2cf1de1c135dd9d41d2ef66d2bd3f9cbd3a79fad32d17ea6e2968ba644d5f887cb66ba6c09a2098f5')
+
 # RC
 if [[ $_build = ? ]]; then
-  source[0]="thunderbird-$pkgver.tar.bz2::https://ftp.mozilla.org/pub/thunderbird/candidates/$_major-candidates/build$_build/linux-x86_64/en-US/thunderbird-$_major.tar.bz2"
+  source[0]="thunderbird-$pkgver.tar.bz2::$latestbinurl"
 fi
 
 package() {
